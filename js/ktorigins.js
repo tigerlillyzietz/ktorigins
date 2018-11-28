@@ -16,18 +16,18 @@
 let lobbyCont  = document.querySelector("#lobby-container"),
     gameCont   = document.querySelector("#game-container"),
     loading    = document.querySelector("#loading"),
-    
+
     // Lobby Selectors
     configButt = document.querySelector("#config-launch"),
     charSelect = "[name=char-select]:checked",
     diffSelect = "[name=diff-select]:checked",
-    
+
     // Game Selectors
     timeLeft   = document.querySelector("#game-timer"),
     healthLeft = document.querySelector("#game-health"),
     currRound  = document.querySelector("#game-round"),
     mazeCont   = document.querySelector("#game-maze"),
-    
+
     // Any relative paths to game assets, including images,
     // sounds, etc.
     assets = {
@@ -42,7 +42,7 @@ let lobbyCont  = document.querySelector("#lobby-container"),
     activeGame,
     activeP5,
     message,
-    
+
     // Default maze in the case where there is no user-
     // specifiable arena
     campaignMaze = [
@@ -63,7 +63,7 @@ let lobbyCont  = document.querySelector("#lobby-container"),
 
 // ---------------------------------------------------
 // GRAPHICS CONFIGURATION
-// We'll use the following Graphics functions to 
+// We'll use the following Graphics functions to
 // configure p5
 // ---------------------------------------------------
 
@@ -72,7 +72,7 @@ let lobbyCont  = document.querySelector("#lobby-container"),
  * executing its draw loop when a new game is started,
  * rather than when the page loads (the default use)
  * NOTE: This means all interfacing with p5 is done
- * through the global activeP5 variable 
+ * through the global activeP5 variable
  */
 function setupP5 (p) {
 
@@ -199,12 +199,12 @@ configButt.onclick = function () {
   let maze = campaignMaze,
       character = document.querySelector(charSelect).value,
       difficulty = document.querySelector(diffSelect).value;
-  
+
   if (!isValidMaze(maze)) {
     alert("[X] Your maze is malformed. Please see the requirements for a valid maze to play.");
     return;
   }
-  
+
   // If we make it here, then the game is good to go! Create a
   // new game object in our global activeGame to start
   initGame({
@@ -223,6 +223,10 @@ configButt.onclick = function () {
 
 class Ktahbject {
   constructor (r, c, game) {
+    this.r = r;
+    this.c = c;
+    this.game = game;
+    this.health = 100;
     // TODO Ktahbjects have 4 properties:
     // r: the row of the ktahbject
     // c: the column of the ktahbject
@@ -230,16 +234,18 @@ class Ktahbject {
     // health: by default, 100
     // Set these properties here
   }
-  
+
   /*
    * Moves the current Ktahbject from its current location
    * to the one at the given row and col
    */
   moveTo (row, col) {
+    let target = getKtahbjectsAt[row][col];
     // TODO Create a variable called target that gets the
     // object(s) at the requested row, col
     // [!] see Game's getKtahbjectsAt method
     // let target = ???;
+
     
     // TODO set a property called facing on this object
     // that is an object with 2 properties: r and c
@@ -248,12 +254,12 @@ class Ktahbject {
     // left, then this.facing = {r: 0, c: -1}; if it just
     // moved up, then this.facing = {r: -1, c: 0}, etc.
     // this.facing = {r: ???, c: ???};
-    // 
+    //
     // We'll use the facing property when a player uses
     // their ability, and that ability must occur in a given
     // direction compared to where they're facing
-    
-    
+
+
     // TODO Only move if the spot is open; check to see if
     // the target is an empty location; if it is, then
     // we can move to the requested spot; if it isn't, then
@@ -262,7 +268,7 @@ class Ktahbject {
          // Uncomment and leave the following two lines as-is:
          // this.game.addAt(this, row, col);
          // this.game.eraseAt(this, this.r, this.c);
-         
+
          // TODO set this ktahbject's r to row and c to col
          // ???
          // ???
@@ -283,13 +289,13 @@ class Player {
     // TODO Since Player is a subclass of Ktahbject, call the superclass'
     // constructor with the same parameters here:
     // ???
-    
+
     // Leave these lines as-is:
     this.asset = this.character = this.game.character;
     this.facing = {r: -1, c: 0}; // Default: facing up
     this.cooldown = 0;
   }
-  
+
   /*
    * Players who are adjacent to a Zombie at a game tick
    * will take damage proportional to the difficulty of
@@ -302,19 +308,19 @@ class Player {
     // TODO reduce this player's health property by the amount
     // decided in the game instance's playerDamage property
     // ???
-    
+
     // TODO update the health bar with the percentage of the player's
     // remaining health, out of a maximum 100
     // [!] updateHealth(percentage)
     // ???
-    
+
     // TODO if the player's health is <= 0, then have the game end
     // in defeat
     // if (???) {
     //   [!] See Game class methods for how to end the game!
     // }
   }
-  
+
   /*
    * Players can use their character's ability as long as it
    * isn't on cooldown, which lasts some number of difficulty-
@@ -327,7 +333,7 @@ class Player {
         case "architect":
           let wallLoc = {r: this.r + this.facing.r, c: this.c + this.facing.c},
               objsAtLoc = this.game.getKtahbjectsAt(wallLoc.r, wallLoc.c);
-          
+
           // TODO if there's nothing in objsAtLoc, then it's clear and
           // ready to have a wall placed in it!
           // if ( ??? )
@@ -337,7 +343,7 @@ class Player {
             // TODO add the newWall to the game's ktahbjects:
             // [!] this.game.ktahbjects
             // ???
-            
+
             // Uncomment, then leave this line as-is:
             // triggerCooldown = true;
           // }
@@ -346,7 +352,7 @@ class Player {
     }
     if (triggerCooldown) { this.cooldown += this.game.cooldown; }
   }
-  
+
   /*
    * A player's act on a given tick reduces their cooldown by
    * 1, but to a min of 0
@@ -372,11 +378,11 @@ class Zombie {
     // TODO Since Zombie is a subclass of Ktahbject, call the superclass'
     // constructor with the same parameters here:
     // ???
-    
+
     // Leave this line as-is:
     this.asset = "zombie";
   }
-  
+
   /*
    * A Zombie acts at every tick, performing the following:
    * 1) Ensure that the zombie is removed if its health is <= 0
@@ -404,7 +410,7 @@ class Zombie {
         chosenDir = dirs[Math.floor(Math.random()*4)],
         // Provides a row, col coordinate of the desired location to move
         toMoveTo = {r: r + chosenDir.r, c: c + chosenDir.c};
-  
+
     // TODO Satisfy act requirement #2: check if the Player is
     // in any of the adjacent cells to the Zombie, and if so,
     // have the Player get eaten and *return* from this function
@@ -413,7 +419,7 @@ class Zombie {
     // [!] this.game.player.getEaten
     // [!] activeP5.dist  // p5's dist method!
     // ??? (this will be an if statement with stuff inside)
-    
+
     // TODO Satisfy act requirement #3: move the Zombie. If we
     // reach here, then we know the Player is not adjacent to the
     // Zombie, and it is still alive, so move it to the location
@@ -450,10 +456,10 @@ class Wall {
     this.asset = "wall";
     this.permanent = permanent;
   }
-  
+
   /*
    * Walls "act" by losing 1 health every tick IF
-   * they are not permanent. This allows us to make 
+   * they are not permanent. This allows us to make
    * temporary ones via the Architect. Kill the wall
    * if its health is <= 0
    */
@@ -461,7 +467,7 @@ class Wall {
     // TODO remove 1 health from this wall IF it is
     // not permanent
     // ???
-    
+
     // TODO if this wall's health is <= 0, then remove
     // it from the game
     // if ( ??? ) {
@@ -478,7 +484,7 @@ class Wall {
 // ---------------------------------------------------
 
 class Game {
-  
+
   /*
    * A Game instance will be passed a configuration, which
    * is a JS Object containing properties needed for
@@ -487,7 +493,7 @@ class Game {
    *           individual Ktahbjects
    *   - char: the character class selected by the user
    *   - diff: the difficulty setting chosen by the user
-   * 
+   *
    * All property values in the config param are assumed
    * to be valid. Any invalid input will be handled by
    * our lobby configuration below
@@ -497,13 +503,13 @@ class Game {
         diffs = ["ktrivial", "ktolerable", "kterrible"],
         diffMultiplier,
         game = this;
-        
+
     // We'll save each Ktahbject in the Game's state;
     // Important: ktahbjects is an array of arrays of arrays,
     // structured as: ktahbjects[rows][cols][objects]
     this.ktahbjects = [];
     this.player = null;
-    
+
     this.difficulty = config.diff;
     this.character = config.char;
     this.rows = maze.length;
@@ -520,7 +526,7 @@ class Game {
     this.tickLength   = (3 - diffMultiplier) * 200 + 500;
     this.surviveTime  = (diffMultiplier + 1) * 15 + 10;
     this.timerMax     = this.surviveTime;
-    
+
     // Parse each cell's contents to create a new
     // Ktahbject of the given type
     for (let r = 0; r < this.rows; r++) {
@@ -535,11 +541,11 @@ class Game {
             // We'll track the player separately for
             // convenience, but they'll also be in the
             // ktahbjects array
-            
+
             // TODO Create a new Player instance and save it
             // within the game's player property
             // ???
-  
+
             // TODO add that newly created player object to the
             // ktahbjects array
             // [!] this.addAt
@@ -561,15 +567,15 @@ class Game {
         }
       }
     }
-    
+
     // Configure the newly created Player's movement
     bindPlayerKeys();
     updateRound(this.round);
-    
+
     // Start the game!
     this.ticking = setInterval(function () { game.doTick(); }, this.tickLength);
   }
-  
+
   /*
    * Adds the given ktahbject to the maze in the position specified;
    * useful for moving ktahbjects from one location to another,
@@ -578,7 +584,7 @@ class Game {
   addAt (ktahbject, row, col) {
     this.ktahbjects[row][col].push(ktahbject);
   }
-  
+
   /*
    * Erases the given ktahbject in the position specified;
    * useful for moving ktahbjects from one location to another
@@ -604,7 +610,7 @@ class Game {
       }
     });
   }
-  
+
   /*
    * Returns the ktahbjects at the requested row and col
    */
@@ -626,7 +632,7 @@ class Game {
       }
     }
   }
-  
+
   /*
    * The main control for zombies and game mechanics, the
    * game will periodically (depending on the difficulty)
@@ -670,7 +676,7 @@ class Game {
       // ???
     }, 3000);
   }
-  
+
   /*
    * Terminates the current game with a score summary
    */
@@ -680,7 +686,7 @@ class Game {
     alert(`K'tah claims another victim...\n You survived ${this.round} rounds.`);
     endGame();
   }
-  
+
 }
 
 
@@ -710,29 +716,29 @@ function isValidMaze (maze) {
         }
         return true;
       },
-      
+
       // Helper function: returns true if and only if the
       // given row's first and last cell are "X"
       hasXBorder = function (row) {
         return row[0] === "X" && row[row.length - 1] === "X";
       },
-      
+
       playerCount = 0,
       zombieCount = 0,
       columnCount = maze[0] && maze[0].length;
-  
+
   // [Criteria 2 Check]
   if (!(isAllXRow(maze[0]) && isAllXRow(maze[maze.length - 1]))) {
     return false;
   }
-  
+
   for (let currRow of maze) {
     // [Criteria 1 Check]
     if (currRow.length !== columnCount) { return false; }
-    
+
     // [Criteria 3 Check]
     if (!hasXBorder(currRow)) { return false; }
-    
+
     for (let cell of currRow) {
       switch (cell) {
         case "P":
@@ -752,7 +758,7 @@ function isValidMaze (maze) {
       }
     }
   }
-  
+
   // [Criteria 4, 5 Check]
   return zombieCount >= 1 && playerCount === 1;
 }
