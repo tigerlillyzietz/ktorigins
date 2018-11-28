@@ -246,7 +246,7 @@ class Ktahbject {
     // [!] see Game's getKtahbjectsAt method
     // let target = ???;
 
-    
+    let facing = {r: 0, c:-1}
     // TODO set a property called facing on this object
     // that is an object with 2 properties: r and c
     // This property represents which way the moved
