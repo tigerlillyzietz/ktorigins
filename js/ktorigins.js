@@ -227,7 +227,7 @@ class Ktahbject {
     this.c = c;
     this.game = game;
     this.health = 100;
-    // TODO Ktahbjects have 4 properties:
+    // DONE Ktahbjects have 4 properties:
     // r: the row of the ktahbject
     // c: the column of the ktahbject
     // game: a reference to the game in which it's housed
