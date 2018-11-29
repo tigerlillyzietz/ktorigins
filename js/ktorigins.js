@@ -240,13 +240,15 @@ class Ktahbject {
    * to the one at the given row and col
    */
   moveTo (row, col) {
-    let target = getKtahbjectsAt[row][col];
+    let target = this.game.getKtahbjectsAt(row,col);
     // TODO Create a variable called target that gets the
     // object(s) at the requested row, col
     // [!] see Game's getKtahbjectsAt method
     // let target = ???;
 
-    
+    let facing = {
+
+    }
     // TODO set a property called facing on this object
     // that is an object with 2 properties: r and c
     // This property represents which way the moved
