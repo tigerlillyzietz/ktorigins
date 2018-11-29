@@ -552,6 +552,9 @@ class Game {
             // TODO add that newly created player object to the
             // ktahbjects array
             // [!] this.addAt
+            let p = new Player(r,c,game);
+            this.Player = p;
+            this.addAt(p,r,c);
             break;
           case "Z":
             // TODO Create a new Zombie instance and push it into
@@ -559,6 +562,9 @@ class Game {
             // [!] this.addAt
             // [!] this.nZoms
             // ???
+            let z = new Zombie(r,c,game);
+            this.Zombie = z;
+            this.addAt(z,r,c);
             this.nZoms++;
             break;
           case "X":
@@ -566,6 +572,9 @@ class Game {
             // the game's ktahbjects array
             // [!] this.addAt
             // ???
+            let w = new Wall(r,c,game);
+            this.Wall = w;
+            this.addAt(w,r,c);
             break;
         }
       }
