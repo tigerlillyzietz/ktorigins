@@ -241,7 +241,7 @@ class Ktahbject {
    */
   moveTo (row, col) {
     let target = this.game.getKtahbjectsAt(row,col);
-    // TODO Create a variable called target that gets the
+    // DONE Create a variable called target that gets the
     // object(s) at the requested row, col
     // [!] see Game's getKtahbjectsAt method
     // let target = ???;
@@ -283,12 +283,13 @@ class Ktahbject {
 // state during the game, including its used abilities
 // ---------------------------------------------------
 
-// TODO Change the Player class definition to inherit from Ktahbject
-class Player {
+// DONE Change the Player class definition to inherit from Ktahbject
+class Player extends Ktahbject {
   constructor (r, c, game) {
-    // TODO Since Player is a subclass of Ktahbject, call the superclass'
+    // DONE Since Player is a subclass of Ktahbject, call the superclass'
     // constructor with the same parameters here:
     // ???
+    super(r, c, game);
 
     // Leave these lines as-is:
     this.asset = this.character = this.game.character;
@@ -372,13 +373,13 @@ class Player {
 // Zombie in the game will be templated here
 // ---------------------------------------------------
 
-// TODO Change the Zombie class definition to inherit from Ktahbject
-class Zombie {
+// DONE Change the Zombie class definition to inherit from Ktahbject
+class Zombie extends Ktahbject {
   constructor (r, c, game) {
-    // TODO Since Zombie is a subclass of Ktahbject, call the superclass'
+    // DONE Since Zombie is a subclass of Ktahbject, call the superclass'
     // constructor with the same parameters here:
     // ???
-
+    super(r, c, game);
     // Leave this line as-is:
     this.asset = "zombie";
   }
@@ -436,22 +437,24 @@ class Zombie {
 // barriers... can also be used for Architect's walls!
 // ---------------------------------------------------
 
-// TODO Change the Wall class definition to inherit from Ktahbject
-class Wall {
+// DONE Change the Wall class definition to inherit from Ktahbject
+class Wall extends Ktahbject {
   // [!] Below, permanent is an *optional* parameter, meaning
   // that it will have the value given (true) if the user does
   // not specify it, otherwise, it attains the value of an
   // entered argument; use this parameter to distinguish permanent
   // walls from those constructed by the Architect
   constructor (r, c, game, permanent = true) {
-    // TODO Since Wall extends Ktahbject, call the superclass'
+    // DONE Since Wall extends Ktahbject, call the superclass'
     // constructor with the same parameters here:
     // ???
-
-    // TODO: If the wall is NOT permanent (i.e., was made
+    super(r, c, game);
+    // DONE: If the wall is NOT permanent (i.e., was made
     // by the architect) set its health to 5 here
     // ???
-
+    if (permanent === false) {
+      this.health = 5;
+    }
     // Leave these lines as-is:
     this.asset = "wall";
     this.permanent = permanent;
