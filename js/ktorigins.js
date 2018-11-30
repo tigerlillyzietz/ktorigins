@@ -270,7 +270,7 @@ class Ktahbject {
          // TODO set this ktahbject's r to row and c to col
          // ???
          // ???
-    // }
+    }
   }
 }
 
