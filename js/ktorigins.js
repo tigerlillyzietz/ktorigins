@@ -246,7 +246,6 @@ class Ktahbject {
     // [!] see Game's getKtahbjectsAt method
     // let target = ???;
 
-    let facing = {r: 0, c:-1}
     // TODO set a property called facing on this object
     // that is an object with 2 properties: r and c
     // This property represents which way the moved
@@ -545,11 +544,11 @@ class Game {
             // convenience, but they'll also be in the
             // ktahbjects array
 
-            // TODO Create a new Player instance and save it
+            // DONE Create a new Player instance and save it
             // within the game's player property
             // ???
 
-            // TODO add that newly created player object to the
+            // DONE add that newly created player object to the
             // ktahbjects array
             // [!] this.addAt
             let p = new Player(r,c,game);
@@ -557,7 +556,7 @@ class Game {
             this.addAt(p,r,c);
             break;
           case "Z":
-            // TODO Create a new Zombie instance and push it into
+            // DONE Create a new Zombie instance and push it into
             // the game's ktahbjects array, and increments
             // [!] this.addAt
             // [!] this.nZoms
@@ -568,7 +567,7 @@ class Game {
             this.nZoms++;
             break;
           case "X":
-            // TODO Create a new Wall instance and push it into
+            // DONE Create a new Wall instance and push it into
             // the game's ktahbjects array
             // [!] this.addAt
             // ???
