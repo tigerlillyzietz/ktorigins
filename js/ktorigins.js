@@ -245,7 +245,7 @@ class Ktahbject {
     // object(s) at the requested row, col
     // [!] see Game's getKtahbjectsAt method
     // let target = ???;
-    this.facing = {r:row,c:col}
+    this.facing = {r: row-1, c: col-1};
     // TODO set a property called facing on this object
     // that is an object with 2 properties: r and c
     // This property represents which way the moved
@@ -259,15 +259,17 @@ class Ktahbject {
     // direction compared to where they're facing
 
 
-    // TODO Only move if the spot is open; check to see if
+    // DONE Only move if the spot is open; check to see if
     // the target is an empty location; if it is, then
     // we can move to the requested spot; if it isn't, then
     // do nothing!
-    if (this.facing === 0) {
+    if (target.length === 0) {
       this.game.addAt(this, row, col);
       this.game.eraseAt(this, this.r, this.c);
 
-         // TODO set this ktahbject's r to row and c to col
+         this.r = row;
+         this.c = col;
+         // DONE set this ktahbject's r to row and c to col
          // ???
          // ???
     }
@@ -551,7 +553,7 @@ class Game {
             // ktahbjects array
             // [!] this.addAt
             let p = new Player(r,c,game);
-            this.Player = p;
+            this.player = p;
             this.addAt(p,r,c);
             break;
           case "Z":
