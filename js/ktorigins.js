@@ -245,7 +245,7 @@ class Ktahbject {
     // object(s) at the requested row, col
     // [!] see Game's getKtahbjectsAt method
     // let target = ???;
-    this.facing = {r: row-1, c: col-1};
+    this.facing = {row:row - this.r, col:col - this.c};
     // TODO set a property called facing on this object
     // that is an object with 2 properties: r and c
     // This property represents which way the moved
@@ -306,21 +306,24 @@ class Player extends Ktahbject {
    * the updateHealth function.
    */
   getEaten () {
-    // TODO reduce this player's health property by the amount
+    this.health -= this.game.playerDamage;
+    // DONE reduce this player's health property by the amount
     // decided in the game instance's playerDamage property
     // ???
-
-    // TODO update the health bar with the percentage of the player's
+    updateHealth(this.health / 100);
+    // DONE update the health bar with the percentage of the player's
     // remaining health, out of a maximum 100
     // [!] updateHealth(percentage)
     // ???
-
-    // TODO if the player's health is <= 0, then have the game end
+    if (this.health <= 0) {
+      this.game.end()
+    }
+  }
+    // DONE if the player's health is <= 0, then have the game end
     // in defeat
     // if (???) {
     //   [!] See Game class methods for how to end the game!
     // }
-  }
 
   /*
    * Players can use their character's ability as long as it
@@ -335,20 +338,24 @@ class Player extends Ktahbject {
           let wallLoc = {r: this.r + this.facing.r, c: this.c + this.facing.c},
               objsAtLoc = this.game.getKtahbjectsAt(wallLoc.r, wallLoc.c);
 
-          // TODO if there's nothing in objsAtLoc, then it's clear and
-          // ready to have a wall placed in it!
-          // if ( ??? )
-            // TODO create a new Wall object at the given wallLoc
-            // let newWall = new Wall( ??? );
+              // DONE if there's nothing in objsAtLoc, then it's clear and
+              // ready to have a wall placed in it!
+              // if ( ??? )
+              if (objsAtLoc.length === 0) {
+                let newWall = new Wall(wallLoc.r, wallLoc.c, this.game, false);
+                this.game.addAt(newWall, wallLoc.r, wallLoc.c);
 
-            // TODO add the newWall to the game's ktahbjects:
-            // [!] this.game.ktahbjects
-            // ???
+                // DONE create a new Wall object at the given wallLoc
+                // let newWall = new Wall( ??? );
 
-            // Uncomment, then leave this line as-is:
-            // triggerCooldown = true;
-          // }
-          break;
+                // DONE add the newWall to the game's ktahbjects:
+                // [!] this.game.ktahbjects
+                // ???
+
+                // Uncomment, then leave this line as-is:
+                triggerCooldown = true;
+               }
+              break;
       }
     }
     if (triggerCooldown) { this.cooldown += this.game.cooldown; }
@@ -359,10 +366,15 @@ class Player extends Ktahbject {
    * 1, but to a min of 0
    */
   act () {
+
     // TODO simple: set this Player's cooldown to
     // the max of 0 and this.cooldown - 1
     // [!] Math.max
     // this.cooldown = ???;
+    //Math.max(this.cooldown) = 0;
+    if (Math.max > 0) {
+      this.cooldown - 1;
+    }
   }
 }
 
@@ -396,7 +408,9 @@ class Zombie extends Ktahbject {
    */
   act () {
     if (this.health <= 0) {
-      // TODO Satisfy act requirement #1:
+      this.game.eraseAt(this, this.r, this.c);
+      return;
+      // DONE Satisfy act requirement #1:
       // If this Zombie is dead, then remove it from the game,
       // and then return from this function
       // [!] this.game.eraseAt
@@ -412,21 +426,25 @@ class Zombie extends Ktahbject {
         // Provides a row, col coordinate of the desired location to move
         toMoveTo = {r: r + chosenDir.r, c: c + chosenDir.c};
 
-    // TODO Satisfy act requirement #2: check if the Player is
+    // DONE Satisfy act requirement #2: check if the Player is
     // in any of the adjacent cells to the Zombie, and if so,
     // have the Player get eaten and *return* from this function
     // immediately after
-    // [!] this.game.player
+    //this.game.player
     // [!] this.game.player.getEaten
-    // [!] activeP5.dist  // p5's dist method!
+    // [!] activeP5.dist()  // p5's dist method!
     // ??? (this will be an if statement with stuff inside)
+    if (activeP5.dist(r, c, this.game.player.r, this.game.player.c) <= 1) {
+      this.game.player.getEaten();
+    }
 
-    // TODO Satisfy act requirement #3: move the Zombie. If we
+    // DONE Satisfy act requirement #3: move the Zombie. If we
     // reach here, then we know the Player is not adjacent to the
     // Zombie, and it is still alive, so move it to the location
     // we made in toMoveTo above
     // [!] this.moveTo
     // ???
+     this.moveTo(toMoveTo.r, toMoveTo.c);
   }
 }
 
@@ -467,15 +485,21 @@ class Wall extends Ktahbject {
    * if its health is <= 0
    */
   act () {
-    // TODO remove 1 health from this wall IF it is
+    // DONE remove 1 health from this wall IF it is
     // not permanent
     // ???
+    if (!this.permanent) {
+      this.health -= 1;
+    }
 
-    // TODO if this wall's health is <= 0, then remove
+    // DONE if this wall's health is <= 0, then remove
     // it from the game
     // if ( ??? ) {
       // [!] this.game.eraseAt
     // }
+    if (this.health <= 0) {
+      this.game.eraseAt(this, this.r, this.c);
+    }
   }
 }
 
@@ -680,12 +704,15 @@ class Game {
 
     // Dramatic delay before next round
     setTimeout(() => {
-      message = "";
-      // TODO: Respawn this.nZoms in random locations
-      // around the map -- the shock factor that only
-      // K'tah! can deliver
-      // [!] this.addAt
-      // ???
+      // message = "";
+      // let this.nZoms = z;
+      // let randRow = Math.floor(Math.random()*this.rows),
+      //     randCol = Math.floor(Math.random()*this.cols);
+      // // TODO: Respawn this.nZoms in random locations
+      // // around the map -- the shock factor that only
+      // // K'tah! can deliver
+      // // [!] this.addAt
+      // // ???
     }, 3000);
   }
 
