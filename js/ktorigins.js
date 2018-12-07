@@ -727,6 +727,7 @@ class Game {
     this.nZoms++;
     this.timerMax++;
     this.round++;
+    this.cooldown++;
     this.surviveTime = this.timerMax;
     message = "K'tah sleeps... for now...";
     updateRound(this.round);
