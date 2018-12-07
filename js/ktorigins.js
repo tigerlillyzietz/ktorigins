@@ -35,7 +35,11 @@ let lobbyCont  = document.querySelector("#lobby-container"),
       images: {
         architect: "./assets/images/architect.png",
         zombie: "./assets/images/zombie.png",
-        wall: "./assets/images/wall.png"
+        wall: "./assets/images/wall.png",
+        boulder: "./assets/images/boulder.png"
+      },
+      sounds: {
+        zombieBite: "./assets/sounds/BiteSound.mp3"
       }
     },
 
@@ -49,7 +53,7 @@ let lobbyCont  = document.querySelector("#lobby-container"),
     campaignMaze = [
       "XXXXXXXXXXXXX",
       "XZ....X....ZX",
-      "X...........X",
+      "X...B.......X",
       "X...X...X...X",
       "X.....P.....X",
       "X...X...X...X",
@@ -312,6 +316,9 @@ class Player extends Ktahbject {
    * the updateHealth function.
    */
   getEaten () {
+    let zombieSound = new Audio(assets.sounds.zombieBite);
+    zombieSound.play();
+
     this.health -= this.game.playerDamage;
     // DONE reduce this player's health property by the amount
     // decided in the game instance's playerDamage property
@@ -455,7 +462,6 @@ class Zombie extends Ktahbject {
   }
 }
 
-
 // ---------------------------------------------------
 // WALL CLASS
 // Used to model the game's boundaries and impassable
@@ -508,6 +514,24 @@ class Wall extends Ktahbject {
       this.game.eraseAt(this, this.r, this.c);
     }
   }
+}
+
+class Boulder extends Wall {
+  constructor (r, c, game) {
+    super(r, c, game);
+    this.asset = "boulder";
+  }
+  act() {
+  let r = this.r,
+      c = this.c,
+      // Lists all of the putative directions the Zombie can move
+      dirs = [{r:0, c:1}, {r:0, c:-1}, {r:1, c:0}, {r:-1, c:0}],
+      // Chooses one of those at random
+      chosenDir = dirs[Math.floor(Math.random()*4)],
+      // Provides a row, col coordinate of the desired location to move
+      toMoveTo = {r: r + chosenDir.r, c: c + chosenDir.c};
+      this.moveTo(toMoveTo.r, toMoveTo.c);
+    }
 }
 
 
@@ -606,6 +630,15 @@ class Game {
             let w = new Wall(r,c,game);
             this.Wall = w;
             this.addAt(w,r,c);
+            break;
+          case "B":
+            // DONE Create a new Wall instance and push it into
+            // the game's ktahbjects array
+            // [!] this.addAt
+            // ???
+            let b = new Boulder(r,c,game);
+            this.Boulder = b;
+            this.addAt(b,r,c);
             break;
         }
       }
@@ -806,7 +839,8 @@ function isValidMaze (maze) {
         case "X":
         case ".":
           break;
-        // [Criteria 6 Check]
+        case "B":
+          break;// [Criteria 6 Check]
         default:
           return false;
       }
