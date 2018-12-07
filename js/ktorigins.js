@@ -25,7 +25,6 @@ let lobbyCont  = document.querySelector("#lobby-container"),
     // Game Selectors
     timeLeft   = document.querySelector("#game-timer"),
     healthLeft = document.querySelector("#game-health"),
-    cooldownLeft = document.querySelector("#game-cooldown"),
     currRound  = document.querySelector("#game-round"),
     mazeCont   = document.querySelector("#game-maze"),
 
@@ -130,7 +129,6 @@ function beginGameLoad () {
   mazeCont.innerHTML = "";
   timeLeft.value = 100;
   healthLeft.value = 100;
-  cooldownLeft.value = 100;
 }
 
 function endGameLoad () {
@@ -140,10 +138,6 @@ function endGameLoad () {
 
 function updateHealth (percentage) {
   healthLeft.value = Math.floor(percentage * 100);
-}
-
-function updateCoolDown (percentage) {
-  cooldownLeft.value = Math.floor(percentage * 100);
 }
 
 function updateTimer (percentage) {
@@ -385,10 +379,6 @@ class Player extends Ktahbject {
     // [!] Math.max
     // this.cooldown = ???;
     this.cooldown = Math.max(this.cooldown - 1, 0);
-
-      updateCoolDown(this.cooldown/this.game.cooldown);
-
-
   }
 }
 
@@ -533,7 +523,6 @@ class Boulder extends Wall {
       this.moveTo(toMoveTo.r, toMoveTo.c);
     }
 }
-
 
 // ---------------------------------------------------
 // GAME CLASS CONFIGURATION
