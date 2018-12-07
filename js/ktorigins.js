@@ -245,8 +245,8 @@ class Ktahbject {
     // object(s) at the requested row, col
     // [!] see Game's getKtahbjectsAt method
     // let target = ???;
-    this.facing = {row:row - this.r, col:col - this.c};
-    // TODO set a property called facing on this object
+    this.facing = {r:row - this.r, c:col - this.c};
+    // DONE set a property called facing on this object
     // that is an object with 2 properties: r and c
     // This property represents which way the moved
     // ktahbject is facing. For example, if it just moved
@@ -367,14 +367,11 @@ class Player extends Ktahbject {
    */
   act () {
 
-    // TODO simple: set this Player's cooldown to
+    // DONE simple: set this Player's cooldown to
     // the max of 0 and this.cooldown - 1
     // [!] Math.max
     // this.cooldown = ???;
-    //Math.max(this.cooldown) = 0;
-    if (Math.max > 0) {
-      this.cooldown - 1;
-    }
+    this.cooldown = Math.max(this.cooldown - 1, 0);
   }
 }
 
@@ -704,17 +701,25 @@ class Game {
 
     // Dramatic delay before next round
     setTimeout(() => {
-      // message = "";
-      // let this.nZoms = z;
-      // let randRow = Math.floor(Math.random()*this.rows),
-      //     randCol = Math.floor(Math.random()*this.cols);
-      // // TODO: Respawn this.nZoms in random locations
-      // // around the map -- the shock factor that only
-      // // K'tah! can deliver
-      // // [!] this.addAt
-      // // ???
+      message = "";
+      let z = this.nZoms;
+      while (z >= 0) {
+        let randRow = Math.floor(Math.random()*this.rows),
+            randCol = Math.floor(Math.random()*this.cols);
+        if (this.getKtahbjectsAt(randRow,randCol).length === 0) {
+            let newZombie = new Zombie (randRow, randCol, this);
+            this.addAt(newZombie, randRow, randCol);
+            z--;
+            }
+      }
+      // DONE: Respawn this.nZoms in random locations
+      // around the map -- the shock factor that only
+      // K'tah! can deliver
+      // [!] this.addAt
+      // ???
     }, 3000);
   }
+
 
   /*
    * Terminates the current game with a score summary
